@@ -1,29 +1,30 @@
 ## Language Detection
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
+[![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
+[![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
 
 This project deals with *analysing* and *classifying* the GitHub repositories based on the language used for the drafting of the **README**.
 
 ### Requirements
 
-* python3
+
 ```
 $ pip3 install six
-$ pip3 install langdetect
 $ pip3 install pytest
+$ pip3 install langdetect
 ```
 
 ### Get Started
 
 To use script individually, if you are using MacOS or Linux type:
 
-`$ python3 detector.py` otherwise: `$ python detector.py` on Windows.
+`$ python language_detection.py`
 
 #### Tasks
 
-- [x] Classification of all READMEs inside the repository.
-- [x] Moving repositories to dedicated folders based on language detection results.
 - [x] Generation of CSV in output which contains the results of the classification and the new paths after the shift.
+- [x] Moving repositories to dedicated folders based on language detection results.
+- [x] Classification of all READMEs inside the repository.
 - [ ] Making CSV as input for the script.
 
 #### How does it work?
@@ -57,9 +58,9 @@ The results are then noted in the CSV generated in output:
 
 Repositories can be classified into:
 
+* Mixed
 * English
 * Not English
-* Mixed
 
 The repositories with an absent and empty README, which have less than the minimum [*number*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) of characters or with an extension not supported, will be classified as *Unknown*, and it will then be up to the user to analyse them manually.
 
@@ -80,12 +81,12 @@ Extensions supported:
 
 GitHub :octocat: provides several *markdowns* that could affect language detection, so the script has an additional feature, that is to **clean** the README analysed by the following markdowns:
 
-* Tables
-* Images
-* Links
-* Code Snippets
 * URLs
 * HTML
+* Links
+* Tables
+* Images
+* Code Snippets
 * Special characters
 
 By default *langdetect* uses a **nondeterministic** approach, this feature is part of the original Google project, if you need to force the algorithm to use a deterministic approach make `translation_type=0` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8).
@@ -94,10 +95,10 @@ It is also possible to choose where to move the classified repositories:
 
 ```
 [destinations]
-destination_english = path
 destination_not_english = path
-destination_mixed = path
+destination_english = path
 destination_unknown = path
+destination_mixed = path
 ```
 
 As well as [*disable*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L6) this feature making `moving_feature=0`, or [*disable*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L14) the generation of CSV file in output making `activate_csv_output=0`
@@ -120,3 +121,5 @@ For more information, see the [*documentation*](https://docs.pytest.org/en/stabl
 ### Conclusions
 
 Language Detection is an *integral* part of [*G-Repo*](https://github.com/MatHeartGaming/G-Repo)  project and it was developed in collaboration with the University of Basilicata :top:
+
+[![MIT license](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)

@@ -22,6 +22,7 @@ Usage:
 import langdetect as dl
 import logging.config
 import shutil as sh
+import pytest
 import argparse
 import time
 import csv
@@ -37,6 +38,7 @@ from configparser import ConfigParser
 # Importing Exceptions from Libraries
 from langdetect.lang_detect_exception import LangDetectException
 
+''' 
 # ----------------------------------------------------------------------------------------------------------------------
 # ABOUT AUTHOR
 # ----------------------------------------------------------------------------------------------------------------------
@@ -66,6 +68,7 @@ parser = argparse.ArgumentParser(description=_DESCRIPTION, formatter_class=argpa
 parser.add_argument("-v", "--version", help=" show script version", action='version', version=' version: 1.0.8')
 parser.add_argument("-a", "--author", help=" show author information", action='version', version=_ABOUT)
 parser.parse_args()
+'''
 
 # ----------------------------------------------------------------------------------------------------------------------
 # PREFERENCES
@@ -135,7 +138,7 @@ _TOTAL_ERRORS = 0
 # ----------------------------------------------------------------------------------------------------------------------
 # Printing Exception
 def _print_exception(e):
-    print("ERROR: Something went wrong -> %s " % e)
+    print("ERROR: Something went wrong -> %s " % e)  # pragma: no cover
 
 
 # Takes care of passing the text and the pattern to the stripper
@@ -147,7 +150,7 @@ def _refactor(repository, str_md, pattern) -> str:
 # Writing CSV
 def _csv_writer(writer, row, destination, num_readme, lang,
                 en_code, en_percentage, other_code, other_percentage):
-    INFO("Writing CSV file!")
+    INFO("Writing CSV file!")  # pragma: no cover
 
     if not _MOVE:
         destination = row['CloneDirectory']
@@ -200,7 +203,7 @@ def _is_valid(string) -> bool:
 
 
 # Checking the typology of the result and perform the detection
-def _detector(target) -> []:
+def _detector(target) -> []:  # pragma: no cover
     dl.DetectorFactory.seed = _OUTPUT_TYPE
     return dl.detect_langs(target)
 
@@ -249,7 +252,7 @@ def _log_info() -> Tuple[float, str, str, str]:
 
 # Getting Error counter
 def increment_error():
-    DEBUG("Incrementing Error counter!")
+    DEBUG("Incrementing Error counter!")  # pragma: no cover
     global _TOTAL_ERRORS
     _TOTAL_ERRORS += 1
 
@@ -261,81 +264,44 @@ def increment_error():
 def stripper(repository, txt, pattern) -> Optional[str]:
     file = txt
 
-    try:
-        match_pattern = re.findall(pattern, txt, re.MULTILINE | re.DOTALL)
-        if match_pattern:
-            new_file = re.sub(pattern, '', file, flags=re.S)
-            return new_file
-        else:
-            return None
-
-    # Catching exceptions
-    except Exception as ex:
-
-        # Incrementing error counter
-        increment_error()
-
-        ERROR("Exception caught: ", exc_info=True)
-        _print_exception(" Catched by stripper method on repository: {} - {} ".format(_name_of(repository), ex))
+    match_pattern = re.findall(pattern, txt, re.MULTILINE | re.DOTALL)
+    if match_pattern:
+        new_file = re.sub(pattern, '', file, flags=re.S)
+        return new_file
+    else:
+        return None
 
 
 # Takes care of checking the text and replacing the targets
 def strip_inspector(repository, str_md) -> str:
+
     # Removing Markdown Code Snippets
     str_from_cs = _refactor(repository, str_md, _CODE_SNIPPETS)
-    if str_from_cs is not None:
-        DEBUG("Code Snippet Markdown detected, removal!")
-        str_md = str_from_cs
-    else:
-        str_md = str_md
+    str_md = str_from_cs if str_from_cs is not None else str_md
 
     # Removing Table Markdown
     str_from_tables = _refactor(repository, str_md, _TABLES)
-    if str_from_tables is not None:
-        DEBUG("Table Markdown detected, removal!")
-        str_md = str_from_tables
-    else:
-        str_md = str_md
+    str_md = str_from_tables if str_from_tables is not None else str_md
 
     # Removing Markdown Links
     str_from_links = _refactor(repository, str_md, _LINKS)
-    if str_from_links is not None:
-        DEBUG("Markdown Links detected, removal!")
-        str_md = str_from_links
-    else:
-        str_md = str_md
+    str_md = str_from_links if str_from_links is not None else str_md
 
     # Removing Markdown Images
     str_from_images = _refactor(repository, str_md, _IMAGES)
-    if str_from_images is not None:
-        DEBUG("Markdown Images detected, removal!")
-        str_md = str_from_images
-    else:
-        str_md = str_md
+    str_md = str_from_images if str_from_images is not None else str_md
 
     # Removing Markdown URLs
     str_from_urls = _refactor(repository, str_md, _URLS)
-    if str_from_urls is not None:
-        DEBUG("Markdown URLs detected, removal!")
-        str_md = str_from_urls
-    else:
-        str_md = str_md
+    str_md = str_from_urls if str_from_urls is not None else str_md
 
     # Removing Html Markdown
     str_from_html = _refactor(repository, str_md, _HTML)
-    if str_from_html is not None:
-        DEBUG("Html Markdown detected, removal!")
-        str_md = str_from_html
-    else:
-        str_md = str_md
+    str_md = str_from_html if str_from_html is not None else str_md
 
     # Removing All Remaining Special Characters
     str_from_all = _refactor(repository, str_md, _REMAINING_SPECIAL_CHARS)
-    if str_from_all is not None:
-        DEBUG("Special Characters Markdown detected, removal!")
-        str_md = str_from_all
-    else:
-        str_md = str_md
+    str_md = str_from_all if str_from_all is not None else str_md
 
     # TODO: Add other patterns in future
 
@@ -343,9 +309,9 @@ def strip_inspector(repository, str_md) -> str:
 
 
 # Analyzes the result and decides the destination of the repositories
-def inspector(detections, repo, writer, row, num):
+def inspector(detections, repo, writer, row, num) -> str:
     try:
-        DEBUG("~ Analyzing detection results")
+        DEBUG("~ Analyzing detection results")  # pragma: no cover
 
         en_base, other_base = _analyze_results(detections)
         en_final, other_final = _parse_results(en_base, other_base)
@@ -354,12 +320,12 @@ def inspector(detections, repo, writer, row, num):
         other = _format(other_final)
         en = _format(en_final)
 
-        INFO("!! How much English is there in the repository? --> {} %".format(en))
+        INFO("!! How much English is there in the repository? --> {} %".format(en))  # pragma: no cover
 
         # Checking if README is english
         if _is_there_english(en_base) and en_final >= 0.90:
 
-            DEBUG("Repository is written in english.")
+            DEBUG("Repository is written in english.")  # pragma: no cover
 
             # Writing CSV
             if _CSV_OUTPUT:
@@ -370,13 +336,16 @@ def inspector(detections, repo, writer, row, num):
                             num, 'english', 'en', en, oth, oth_percentage)
 
             if _MOVE:
-                INFO("OPERATION: Moving repository to 'english' folder because README is written in english!")
+                INFO("OPERATION: Moving repository to 'english' folder "
+                     "because README is written in english!")  # pragma: no cover
                 MOVE_TO(repo, "%s" % _ENGLISH)
+
+            return "english"
 
         # Checking if README is mixed
         if _is_there_english(en_base) > 0 and 0.10 < en_final < 0.90:
 
-            INFO("Repository is written in multiple languages.")
+            INFO("Repository is written in multiple languages.")  # pragma: no cover
 
             # Writing CSV
             if _CSV_OUTPUT:
@@ -384,13 +353,16 @@ def inspector(detections, repo, writer, row, num):
                             num, 'mixed', 'en', en, 'others', other)
 
             if _MOVE:
-                INFO("OPERATION: Moving repository to 'mixed' folder because README is written in different languages!")
+                INFO("OPERATION: Moving repository to 'mixed' folder because "
+                     "README is written in different languages!")  # pragma: no cover
                 MOVE_TO(repo, "%s" % _MIXED)
+
+            return "mixed"
 
         # checking if README is not in English
         if not _is_there_english(en_base) or en_final <= 0.10:
 
-            INFO("Repository is not written in english.")
+            INFO("Repository is not written in english.")  # pragma: no cover
 
             # Writing CSV
             if _CSV_OUTPUT:
@@ -402,16 +374,21 @@ def inspector(detections, repo, writer, row, num):
                                 num, 'not english', 'others', other, '', '')
 
             if _MOVE:
-                INFO("OPERATION: Moving repository to 'not english' folder because README isn't written in english!")
+                INFO("OPERATION: Moving repository to 'not english' folder because "
+                     "README isn't written in english!")  # pragma: no cover
                 MOVE_TO(repo, "%s" % _NOT_ENGLISH)
+
+            return "not english"
 
     # Catching exceptions
     except Exception as ex:
 
+        pytest.fail(ex, pytrace=True)
+
         # Incrementing error counter
         increment_error()
 
-        CRITICAL("Exception caught: ", exc_info=True)
+        CRITICAL("Exception caught: ", exc_info=True)  # pragma: no cover
         _print_exception(" Catched by inspector method on repository: {} - {} ".format(_name_of(repo), ex))
 
 
@@ -420,40 +397,40 @@ def inspector(detections, repo, writer, row, num):
 # ----------------------------------------------------------------------------------------------------------------------
 def main():
     try:
-        DEBUG("Opening input CSV file.")
+        DEBUG("Opening input CSV file.")  # pragma: no cover
 
         with open(_CSV, encoding='utf-8', errors='ignore') as srcfile:
             readers = csv.DictReader(srcfile, delimiter=',')
 
-            DEBUG("Creating output CSV file.")
+            DEBUG("Creating output CSV file.")  # pragma: no cover
 
             with open(_NEW_CSV, 'w', newline='') as csv_file:
                 writer = csv.DictWriter(csv_file, fieldnames=_FIELDNAMES)
                 writer.writeheader()  # Writing fields
 
-                DEBUG("Scanning CSV rows...\n\n")
+                DEBUG("Scanning CSV rows...\n\n")  # pragma: no cover
 
                 for row in readers:
 
-                    INFO("\n\n")
+                    INFO("\n\n")  # pragma: no cover
                     repo_src = row['CloneDirectory']  # Taking the path from CSV
 
                     # Checking if the repository cannot be cloned
                     if 'null' in repo_src:
-                        WARNING("Can't access because repository cannot be cloned! ")
+                        WARNING("Can't access because repository cannot be cloned! ")  # pragma: no cover
                         _csv_writer(writer, row, 'null', '', '', '', '', '', '')
 
                         continue
 
                     else:
-                        INFO("[ Analyzing Repository: %s ]" % _name_of(repo_src).upper())
-                        INFO("Repository src: %s" % repo_src)
+                        INFO("[ Analyzing Repository: %s ]" % _name_of(repo_src).upper())  # pragma: no cover
+                        INFO("Repository src: %s" % repo_src)  # pragma: no cover
 
                     readme_paths = _find_all_md(repo_src)  # Checking if readme exist in directory and its subdirs
 
                     # Scanning files in repository
                     if readme_paths:
-                        INFO("README found = %s" % len(readme_paths))
+                        INFO("README found = %s" % len(readme_paths))  # pragma: no cover
 
                         # defining the json for the results
                         detections = {
@@ -468,23 +445,23 @@ def main():
                                 idx += 1  # Increasing index
 
                                 log = "* Opening Readme." if len(readme_paths) == 1 else "* Opening Readme n.%s" % idx
-                                DEBUG(log)
-                                INFO("README path: %s" % readme)
+                                DEBUG(log)  # pragma: no cover
+                                INFO("README path: %s" % readme)  # pragma: no cover
 
                                 with open(readme, 'r', encoding='utf-8', errors='ignore') as f:
-                                    DEBUG("Trying to clean the readme.")
+                                    DEBUG("Trying to clean the readme.")  # pragma: no cover
 
                                     str_md = strip_inspector(_name_of(repo_src), f.read())  # Cleaning
 
-                                DEBUG("Readme closed.")
-                                DEBUG("Checking if readme is empty.")
+                                DEBUG("Readme closed.")  # pragma: no cover
+                                DEBUG("Checking if readme is empty.")  # pragma: no cover
 
                                 # Doing checks after closing target
                                 if str_md and not str_md.isspace() and _is_valid(str_md):
-                                    DEBUG("Readme ISN'T EMPTY.")
+                                    DEBUG("Readme ISN'T EMPTY.")  # pragma: no cover
 
                                     try:
-                                        DEBUG("Entering in the Language Detection phase.")
+                                        DEBUG("Entering in the Language Detection phase.")  # pragma: no cover
                                         results = _detector(str_md)  # Managing the result of the language detector
 
                                     # Catching exceptions
@@ -493,7 +470,7 @@ def main():
                                         # Incrementing error counter
                                         increment_error()
 
-                                        ERROR("Exception caught: ", exc_info=True)
+                                        ERROR("Exception caught: ", exc_info=True)  # pragma: no cover
                                         print("Problem on repository: {}, Passing to Language Detector empty string,"
                                               "probably not null, but without characters!".format(_name_of(repo_src)))
 
@@ -502,13 +479,13 @@ def main():
                                     else:
                                         log = "Multiple languages detected!" if len(results) > 1 \
                                             else "language detected!"
-                                        DEBUG(log)
+                                        DEBUG(log)  # pragma: no cover
 
                                         for result in results:
 
                                             INFO("LANGUAGE DETECTED: {} with {}% confidence."
-                                                 .format(result.lang, _format(result.prob)))
-                                            DEBUG("Loading the results into a data structure.")
+                                                 .format(result.lang, _format(result.prob)))  # pragma: no cover
+                                            DEBUG("Loading the results into a data structure.")  # pragma: no cover
 
                                             detections["Detections"].append({"Detection": [
                                                 {
@@ -518,7 +495,7 @@ def main():
                                             ]})
 
                                 else:
-                                    WARNING("README IS EMPTY!")
+                                    WARNING("README IS EMPTY!")  # pragma: no cover
 
                             # Catching exceptions
                             except EnvironmentError:
@@ -526,7 +503,7 @@ def main():
                                 # Incrementing error counter
                                 increment_error()
 
-                                ERROR("Exception caught: ", exc_info=True)
+                                ERROR("Exception caught: ", exc_info=True)  # pragma: no cover
                                 print("Problem on readme n.{} of the repository: {}!".format(idx, _name_of(repo_src)))
 
                                 pass
@@ -534,11 +511,12 @@ def main():
                         # Checking for results
                         if len(detections['Detections']) > 0:
 
-                            DEBUG("Entering in the Data Study phase!")
-                            inspector(detections, repo_src, writer, row, len(readme_paths))
+                            DEBUG("Entering in the Data Study phase!")  # pragma: no cover
+                            results_info = inspector(detections, repo_src, writer, row, len(readme_paths))
+                            print("{} -> {}".format(_name_of(repo_src), results_info))
 
                         else:
-                            WARNING("No written readme found!")
+                            WARNING("No written readme found!")  # pragma: no cover
 
                             # Writing CSV
                             if _CSV_OUTPUT:
@@ -546,11 +524,12 @@ def main():
                                             len(readme_paths), 'unknown', '', '', '', '')
 
                             if _MOVE:
-                                INFO("OPERATION: Moving repository to 'unknown' folder, because README is empty!")
+                                INFO("OPERATION: Moving repository to 'unknown' folder, "
+                                     "because README is empty!")  # pragma: no cover
                                 MOVE_TO(repo_src, "%s" % _UNKNOWN)
 
                     else:
-                        WARNING("README does not exist, or the format is not supported!")
+                        WARNING("README does not exist, or the format is not supported!")  # pragma: no cover
 
                         # Writing CSV
                         if _CSV_OUTPUT:
@@ -558,7 +537,8 @@ def main():
                                         0, 'unknown', '', '', '', '')
 
                         if _MOVE:
-                            INFO("OPERATION: Moving repository to 'unknown' folder, because README does not exist!")
+                            INFO("OPERATION: Moving repository to 'unknown' folder, because "
+                                 "README does not exist!")  # pragma: no cover
                             MOVE_TO(repo_src, "%s" % _UNKNOWN)
 
     # Catching exceptions
@@ -567,7 +547,7 @@ def main():
         # Incrementing error counter
         increment_error()
 
-        CRITICAL("Exception caught: ", exc_info=True)
+        CRITICAL("Exception caught: ", exc_info=True)  # pragma: no cover
         _print_exception(" Catched by main method on repository: {} - {} ".format(_name_of(repo_src), ex))
 
 
@@ -582,7 +562,7 @@ INFO("{} - STARTING SCRIPT..."
      "- - - - - - - - - - - - - - - - - - - -"
      "\n- {}\n- {}\n- {}\n"
      "- - - - - - - - - - - - - - - - - - - -"
-     "\n\n-->\n".format(TODAY.strftime("%d/%m/%Y"), _is_move, _is_deterministic, _is_csv))
+     "\n\n-->\n".format(TODAY.strftime("%d/%m/%Y"), _is_move, _is_deterministic, _is_csv))  # pragma: no cover
 
 # Starting Detector Script
 if __name__ == "__main__":  # So you can use [ detector.py ] individual methods for testing or as a module!
@@ -590,4 +570,4 @@ if __name__ == "__main__":  # So you can use [ detector.py ] individual methods 
 
 # Calculates the execution time of the script
 _TOTAL_TIME = time.time() - _start_time
-INFO("\n\nFinished in: {} seconds with {} Errors.".format(_TOTAL_TIME, _TOTAL_ERRORS))
+INFO("\n\nFinished in: {} seconds with {} Errors.".format(_TOTAL_TIME, _TOTAL_ERRORS))  # pragma: no cover

@@ -1,28 +1,27 @@
 ## Language Detection
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
-
+[![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
+[![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
 
 Questo progetto si occupa di *analizzare* e *classificare* le repository GitHub in base alla lingua utilizzata per la stesura del **README**.
 
 ### Requisiti
-* python3
 ```
 $ pip3 install six
-$ pip3 install langdetect
 $ pip3 install pytest
+$ pip3 install langdetect
 ```
 
 ### Get Started
 Per utilizzare Language Detector individualmente, se utilizzi MacOS o Linux digitare il comando:
 
-`$ python3 detector.py` altrimenti: `$ python detector.py` su Windows.
+`$ python language_detection.py`
 
 #### Tasks
 
-- [x] Classificazione di tutti i README all'interno della repository.
-- [x] Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
 - [x] Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
+- [x] Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
+- [x] Classificazione di tutti i README all'interno della repository.
 - [ ] Generazione CSV in input contenente i path verso le repository.
 
 #### Come Funziona?
@@ -56,9 +55,9 @@ I risultati vengono poi annotati nel CSV generato in output:
 
 Dunque le repository possono essere classificate in:
 
+* Misto
 * Inglese
 * Non Inglese
-* Misto
 
 Le repository aventi il README assente, vuoto, con meno del [*numero minimo*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) di caratteri oppure con un'estensione non supportata verranno classificate come *Unknown*, e sarà poi cura dell'utente analizzarle manualmente.
 
@@ -79,12 +78,12 @@ Estensioni supportate:
 
 GitHub :octocat: mette a disposizione numerosi *markdown*, quest'ultimi potrebbero influenzare la detection della lingua, perciò lo script dispone di un'ulteriore feature, ovvero quella di pulire il README analizzato dai seguenti markdown:
 
-* Tabelle
-* Immagini
 * Link
-* Code Snippet
 * URLs
 * HTML
+* Tabelle
+* Immagini
+* Code Snippet
 * Caratteri Speciali
 
 Di default *langdetect* utilizza un approccio **non deterministico**, questa funzionalità è parte del progetto originale di Google, se hai bisogno di forzare l'algoritmo ad utilizzare un approccio deterministico modifica la seguente [*linea*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8) in `translation_type=0` nel file di configurazione.
@@ -116,3 +115,5 @@ Per ulteriori informazioni consultare la [*documentazione*](https://docs.pytest.
 ### Conclusioni
 
 Language Detector *è parte integrante* del progetto [*G-Repo*](https://github.com/MatHeartGaming/G-Repo), sviluppato in collaborazione con l'Università Degli Studi Della Basilicata :top:
+
+[![MIT license](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)

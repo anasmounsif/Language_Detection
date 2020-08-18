@@ -1,3 +1,5 @@
 six
 langdetect
 pytest
+pytest-cov
+coveralls
