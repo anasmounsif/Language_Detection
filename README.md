@@ -2,6 +2,7 @@
 
 [![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
 [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
+[![Coverage Status](https://coveralls.io/repos/github/anasmounsif/Language_Detection/badge.svg?branch=master)](https://coveralls.io/github/anasmounsif/Language_Detection?branch=master)
 
 This project deals with *analysing* and *classifying* the GitHub repositories based on the language used for the drafting of the **README**.
 
