@@ -19,28 +19,29 @@ import language_detection as dt
 import pytest
 from pathlib import Path as sysPath
 import os
+import csv
 
 # Config shortcut
 PATH = os.path
 
 # Directories and files for Testing
-repo_withMd = sysPath("repositories_test/repo_withReadme/")
-repo_withNoMd = sysPath("repositories_test/repo_withNoReadme/")
-repo_withNestedMd = sysPath("repositories_test/repo_withNestedReadme/")
-repo_withRenamedMd = sysPath("repositories_test/repo_withRenamedReadme/")
+repo_withMd = sysPath("test_stuff/repo_withReadme/")
+repo_withNoMd = sysPath("test_stuff/repo_withNoReadme/")
+repo_withNestedMd = sysPath("test_stuff/repo_withNestedReadme/")
+repo_withRenamedMd = sysPath("test_stuff/repo_withRenamedReadme/")
 
-repo_withEmptyMd = sysPath("repositories_test/repo_withEmptyReadme/")
-repo_withFullMd = sysPath("repositories_test/repo_withFullReadme/")
+repo_withEmptyMd = sysPath("test_stuff/repo_withEmptyReadme/")
+repo_withFullMd = sysPath("test_stuff/repo_withFullReadme/")
 
 # Regex Tests
-md_withTable = sysPath("repositories_test/README_files/README_table.md")
-md_withLink = sysPath("repositories_test/README_files/README_link.md")
-md_withImage = sysPath("repositories_test/README_files/README_image.md")
-md_withCodeSnippet = sysPath("repositories_test/README_files/README_codeSnippet.md")
-md_withCodeUrl = sysPath("repositories_test/README_files/README_url.md")
-md_withHtml = sysPath("repositories_test/README_files/README_html.md")
-md_withRemaining = sysPath("repositories_test/README_files/README_remaining.md")
-md_all = sysPath("repositories_test/README_files/README_all.md")
+md_withTable = sysPath("test_stuff/README_files/README_table.md")
+md_withLink = sysPath("test_stuff/README_files/README_link.md")
+md_withImage = sysPath("test_stuff/README_files/README_image.md")
+md_withCodeSnippet = sysPath("test_stuff/README_files/README_codeSnippet.md")
+md_withCodeUrl = sysPath("test_stuff/README_files/README_url.md")
+md_withHtml = sysPath("test_stuff/README_files/README_html.md")
+md_withRemaining = sysPath("test_stuff/README_files/README_remaining.md")
+md_all = sysPath("test_stuff/README_files/README_all.md")
 
 
 # Test Methods   
@@ -176,9 +177,9 @@ def test_isdir():
 
 # Test if string contains is valid method
 def test_is_valid():
-    digit_condition = dt._is_valid("12351236523875")
-    min_length_condition = dt._is_valid("less than %s " % dt._MIN_LENGTH)
-    special_char_condition = dt._is_valid("???_+><#$%@")
+    digit_condition = dt.is_valid("12351236523875")
+    min_length_condition = dt.is_valid("less than %s " % dt._MIN_LENGTH)
+    special_char_condition = dt.is_valid("???_+><#$%@")
     if not digit_condition and not min_length_condition and not special_char_condition:
         assert True
     else:
@@ -233,6 +234,7 @@ def test_analyze_results():
     assert other_base == 2.3
 
 
+# Test error incrementing
 def test_increment_error():
     dt.increment_error()
     dt.increment_error()
@@ -242,7 +244,8 @@ def test_increment_error():
     assert dt._TOTAL_ERRORS == 5
 
 
-def test_fail_inspector():
+# Test inspector
+def test_inspector():
     dt._CSV_OUTPUT = 0
     english_detections1 = {
         "Detections": [{
@@ -256,8 +259,8 @@ def test_fail_inspector():
     not_english_detections = {
         "Detections": [{
             "Detection": [
-                {"code": "cn", "percentage": 0.9},
-                {"code": "cn", "percentage": 0.1}
+                {"code": "cn", "percentage": 0.95},
+                {"code": "en", "percentage": 0.05}
             ]
         }]
     }
@@ -271,5 +274,44 @@ def test_fail_inspector():
         }]
     }
     assert dt.inspector(mixed_detections, "", None, None, 0) == "mixed"
+
+
+# Test all main
+def test_main():
+    dt._CSV_OUTPUT = 1
+    dt._CSV = "test_stuff/input.csv"
+    dt.main()
+
+
+# Test no csv
+def test_fail_main():
+    with pytest.raises(Exception):
+        dt._CSV = ""
+        dt.main()
+
+
+# Override
+def new_is_valid(string):
+    return True
+
+
+def test_fail_lang_detect():
+    dt.is_valid = new_is_valid
+    dt._MIN_LENGTH = 2
+    dt._CSV = "test_stuff/input.csv"
+    dt.main()
+
+
+def test_fail_inspector():
+    with open(dt._CSV, encoding='utf-8', errors='ignore') as srcfile:
+        readers = csv.DictReader(srcfile, delimiter=',')
+        with open(dt._NEW_CSV, 'w', newline='') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=dt._FIELDNAMES)
+            writer.writeheader()
+            for row in readers:
+                value = dt.inspector("", "", writer, row, 0)
+
+
+
 
 

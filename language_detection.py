@@ -38,7 +38,7 @@ from configparser import ConfigParser
 # Importing Exceptions from Libraries
 from langdetect.lang_detect_exception import LangDetectException
 
-''' 
+'''
 # ----------------------------------------------------------------------------------------------------------------------
 # ABOUT AUTHOR
 # ----------------------------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ def _format(percent) -> str:
 
 
 # Checking if README is valid
-def _is_valid(string) -> bool:
+def is_valid(string) -> bool:
     condition = re.match(_ILLEGAL_STRING, string)
     return False if len(string) < _MIN_LENGTH or condition else True
 
@@ -303,7 +303,7 @@ def strip_inspector(repository, str_md) -> str:
     str_from_all = _refactor(repository, str_md, _REMAINING_SPECIAL_CHARS)
     str_md = str_from_all if str_from_all is not None else str_md
 
-    # TODO: Add other patterns in future
+    # TODO: Add other patterns...
 
     return str_md
 
@@ -383,8 +383,6 @@ def inspector(detections, repo, writer, row, num) -> str:
     # Catching exceptions
     except Exception as ex:
 
-        pytest.fail(ex, pytrace=True)
-
         # Incrementing error counter
         increment_error()
 
@@ -457,7 +455,7 @@ def main():
                                 DEBUG("Checking if readme is empty.")  # pragma: no cover
 
                                 # Doing checks after closing target
-                                if str_md and not str_md.isspace() and _is_valid(str_md):
+                                if str_md and not str_md.isspace() and is_valid(str_md):
                                     DEBUG("Readme ISN'T EMPTY.")  # pragma: no cover
 
                                     try:
@@ -498,13 +496,14 @@ def main():
                                     WARNING("README IS EMPTY!")  # pragma: no cover
 
                             # Catching exceptions
-                            except EnvironmentError:
+                            except EnvironmentError: # pragma: no cover
 
                                 # Incrementing error counter
                                 increment_error()
 
                                 ERROR("Exception caught: ", exc_info=True)  # pragma: no cover
-                                print("Problem on readme n.{} of the repository: {}!".format(idx, _name_of(repo_src)))
+                                print("Problem on readme n.{} of the repository: {}! "
+                                      "probably alias detected!".format(idx, _name_of(repo_src)))
 
                                 pass
 
@@ -564,9 +563,12 @@ INFO("{} - STARTING SCRIPT..."
      "- - - - - - - - - - - - - - - - - - - -"
      "\n\n-->\n".format(TODAY.strftime("%d/%m/%Y"), _is_move, _is_deterministic, _is_csv))  # pragma: no cover
 
+
 # Starting Detector Script
-if __name__ == "__main__":  # So you can use [ detector.py ] individual methods for testing or as a module!
-    main()
+def init():  # pragma: no cover
+    if __name__ == "__main__":  # So you can use [ detector.py ] individual methods for testing or as a module!
+        main()
+
 
 # Calculates the execution time of the script
 _TOTAL_TIME = time.time() - _start_time

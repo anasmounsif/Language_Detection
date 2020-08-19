@@ -1,0 +1,9 @@
+Index,CloneDirectory
+0,repositories_test/repo_withNoReadme/
+1,repositories_test/repo_withFullReadme/
+2,repositories_test/repo_withEmptyReadme/
+3,repositories_test/repo_withAliasReadme/
+4,null
+5,repositories_test/README_files/
+
+
