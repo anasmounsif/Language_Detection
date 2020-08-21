@@ -20,7 +20,4 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - pytest --cov=language_detection
-
-after_success:
-  - coveralls
+  - pytest

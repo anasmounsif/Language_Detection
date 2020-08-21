@@ -2,12 +2,10 @@
 
 [![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
 [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
-[![Coverage Status](https://coveralls.io/repos/github/anasmounsif/Language_Detection/badge.svg?branch=master)](https://coveralls.io/github/anasmounsif/Language_Detection?branch=master)
 
 This project deals with *analysing* and *classifying* the GitHub repositories based on the language used for the drafting of the **README**.
 
 ### Requirements
-
 
 ```
 $ pip3 install six
@@ -26,7 +24,7 @@ To use script individually, if you are using MacOS or Linux type:
 - [x] Generation of CSV in output which contains the results of the classification and the new paths after the shift.
 - [x] Moving repositories to dedicated folders based on language detection results.
 - [x] Classification of all READMEs inside the repository.
-- [ ] Making CSV as input for the script.
+- [x] Making CSV as input for the script.
 
 #### How does it work?
 
@@ -39,6 +37,12 @@ The script takes as input a CSV file that must contain information on the locati
 | ...      | ...                                   |
 
 You can give the script the [*name*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) of the CSV by using the configuration file.
+
+###### You don't have the input.csv?
+
+The script is able to automatically generate for you an input.csv file starting from the folder where the repositories are cloned, all you have to do is set `input_generator=1` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) and [*supply*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) the path where the repositories are.
+
+---
 
 Language Detection uses the library [*langdetect*](https://github.com/Mimino666/langdetect) which implements an improved Naive Bayes classifier through character normalization and application of specific filters, for more details see: [*langdetect slideshare*](https://www.slideshare.net/shuyo/language-detection-library-for-java).
 
@@ -113,7 +117,7 @@ Logging is an expensive operation so by default the level is set to INFO, if you
 
 #### Test
 
-To run the tests, type: `$ pytest` inside the root folder or you can also run specific tests by typing:
+To run the tests, type: `$ pytest -v` inside the root folder or you can also run specific tests by typing:
 
 `$ py.test -k <test_name> -v`
 
@@ -123,4 +127,5 @@ For more information, see the [*documentation*](https://docs.pytest.org/en/stabl
 
 Language Detection is an *integral* part of [*G-Repo*](https://github.com/MatHeartGaming/G-Repo)  project and it was developed in collaboration with the University of Basilicata :top:
 
+---
 [![MIT license](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)

@@ -7,7 +7,7 @@ Python 3.8
 PyTest
 
 Usage:
-RECOMMENDED: [ pytest ] in test_detector folder
+RECOMMENDED: [ pytest -v ] in test_detector folder
 Or [ py.test -k <method_name> -v ] for testing specific method.
 For more information about PyTest visit: https://docs.pytest.org/en/stable/contents.html
 """
@@ -19,7 +19,6 @@ import language_detection as dt
 import pytest
 from pathlib import Path as sysPath
 import os
-import csv
 
 # Config shortcut
 PATH = os.path
@@ -34,14 +33,14 @@ repo_withEmptyMd = sysPath("test_stuff/repo_withEmptyReadme/")
 repo_withFullMd = sysPath("test_stuff/repo_withFullReadme/")
 
 # Regex Tests
-md_withTable = sysPath("test_stuff/README_files/README_table.md")
-md_withLink = sysPath("test_stuff/README_files/README_link.md")
-md_withImage = sysPath("test_stuff/README_files/README_image.md")
-md_withCodeSnippet = sysPath("test_stuff/README_files/README_codeSnippet.md")
-md_withCodeUrl = sysPath("test_stuff/README_files/README_url.md")
-md_withHtml = sysPath("test_stuff/README_files/README_html.md")
-md_withRemaining = sysPath("test_stuff/README_files/README_remaining.md")
-md_all = sysPath("test_stuff/README_files/README_all.md")
+md_withTable = sysPath("test_stuff/readme_tests/README_table.md")
+md_withLink = sysPath("test_stuff/readme_tests/README_link.md")
+md_withImage = sysPath("test_stuff/readme_tests/README_image.md")
+md_withCodeSnippet = sysPath("test_stuff/readme_tests/README_codeSnippet.md")
+md_withCodeUrl = sysPath("test_stuff/readme_tests/README_url.md")
+md_withHtml = sysPath("test_stuff/readme_tests/README_html.md")
+md_withRemaining = sysPath("test_stuff/readme_tests/README_remaining.md")
+md_all = sysPath("test_stuff/readme_tests/README_all.md")
 
 
 # Test Methods   
@@ -61,9 +60,9 @@ def test_exists():
 # Test if readme is empty and not
 def test_empty_full():
     with open(PATH.abspath(dt._find_all_md(repo_withEmptyMd)[0]), 'r', encoding='utf8') as f:
-        test_string_1 = dt.strip_inspector("", f.read()).replace("\n", " ")
+        test_string_1 = dt.replacer_operator(f.read()).replace("\n", " ")
     with open(PATH.abspath(dt._find_all_md(repo_withFullMd)[0]), 'r', encoding='utf8') as f:
-        test_string_2 = dt.strip_inspector("", f.read()).replace("\n", " ")
+        test_string_2 = dt.replacer_operator(f.read()).replace("\n", " ")
     if test_string_1 and not test_string_1.isspace() and \
             test_string_2 and not test_string_2.isspace():
         assert True
@@ -75,7 +74,7 @@ def test_empty_full():
 def test_remove_table():
     with open(PATH.abspath(md_withTable), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._TABLES)
+        output = dt._refactor(str_md, dt._TABLES)
         if output and not output.isspace():
             assert False
         else:
@@ -86,7 +85,7 @@ def test_remove_table():
 def test_remove_links():
     with open(PATH.abspath(md_withLink), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._LINKS)
+        output = dt._refactor(str_md, dt._LINKS)
         if output and not output.isspace():
             assert False
         else:
@@ -97,7 +96,7 @@ def test_remove_links():
 def test_remove_urls():
     with open(PATH.abspath(md_withCodeUrl), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._URLS)
+        output = dt._refactor(str_md, dt._URLS)
         if output and not output.isspace():
             assert False
         else:
@@ -108,7 +107,7 @@ def test_remove_urls():
 def test_remove_images():
     with open(PATH.abspath(md_withImage), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._IMAGES)
+        output = dt._refactor(str_md, dt._IMAGES)
         if output and not output.isspace():
             assert False
         else:
@@ -119,7 +118,7 @@ def test_remove_images():
 def test_remove_code_snippet():
     with open(PATH.abspath(md_withCodeSnippet), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._CODE_SNIPPETS)
+        output = dt._refactor(str_md, dt._CODE_SNIPPETS)
         if output and not output.isspace():
             assert False
         else:
@@ -130,38 +129,29 @@ def test_remove_code_snippet():
 def test_remove_html():
     with open(PATH.abspath(md_withHtml), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._HTML)
-        if output.strip() == 'The HTML - test regex.':
-            assert True
-        else:
-            assert False
+        output = dt._refactor(str_md, dt._HTML)
+        assert output.strip() == 'The HTML - test regex.'
 
 
 # Test elimination all Remaining Special Character
 def test_remove_remaining():
     with open(PATH.abspath(md_withRemaining), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt._refactor("", str_md, dt._REMAINING_SPECIAL_CHARS)
-        if output.strip() == 'TesTtEStTesT的模拟仿真程序':
-            assert True
-        else:
-            assert False
+        output = dt._refactor(str_md, dt._REMAINING_SPECIAL_CHARS)
+        assert output.strip() == 'TesTtEStTesT的模拟仿真程序'
 
 
 # Test elimination of all markdowns
 def test_all_markdown_removal():
     with open(PATH.abspath(md_all), 'r', encoding='utf8') as f:
         str_md = f.read()
-        output = dt.strip_inspector("", str_md)
-        if output.strip() == 'TESTTESTTEE':
-            assert True
-        else:
-            assert False
+        output = dt.replacer_operator(str_md)
+        assert output.strip() == 'TESTTESTTEE'
 
 
 # Test the correct transformation of the percentages
 def test_format():
-    percentage = 0.499928373951075347813
+    percentage = 0.49993589
     assert dt._format(percentage) == str(50.0)
 
 
@@ -177,9 +167,9 @@ def test_isdir():
 
 # Test if string contains is valid method
 def test_is_valid():
-    digit_condition = dt.is_valid("12351236523875")
-    min_length_condition = dt.is_valid("less than %s " % dt._MIN_LENGTH)
-    special_char_condition = dt.is_valid("???_+><#$%@")
+    digit_condition = dt._is_valid("12351236523875")
+    min_length_condition = dt._is_valid("less than %s " % dt._MIN_LENGTH)
+    special_char_condition = dt._is_valid("???_+><#$%@")
     if not digit_condition and not min_length_condition and not special_char_condition:
         assert True
     else:
@@ -216,102 +206,18 @@ def test_percentage_parser():
         assert False
 
 
+# Test analyze results
 def test_analyze_results():
     detections = {
         "Detections": [{
             "Detection": [
-                {"code": "en", "percentage": 0.4},
-                {"code": "en", "percentage": 0.3},
-                {"code": "cn", "percentage": 0.7},
-                {"code": "it", "percentage": 0.6},
-                {"code": "cn", "percentage": 1.0},
-                {"code": "en", "percentage": 1.0}
+                {"code": "en", "percentage": 0.4}, {"code": "en", "percentage": 0.3},
+                {"code": "cn", "percentage": 0.7}, {"code": "it", "percentage": 0.6},
+                {"code": "cn", "percentage": 1.0}, {"code": "en", "percentage": 1.0}
             ]
         }]
     }
     en_base, other_base = dt._analyze_results(detections)
     assert en_base == 1.7
     assert other_base == 2.3
-
-
-# Test error incrementing
-def test_increment_error():
-    dt.increment_error()
-    dt.increment_error()
-    dt.increment_error()
-    dt.increment_error()
-    dt.increment_error()
-    assert dt._TOTAL_ERRORS == 5
-
-
-# Test inspector
-def test_inspector():
-    dt._CSV_OUTPUT = 0
-    english_detections1 = {
-        "Detections": [{
-            "Detection": [
-                {"code": "en", "percentage": 0.9},
-                {"code": "cn", "percentage": 0.1}
-            ]
-        }]
-    }
-    assert dt.inspector(english_detections1, "", None, None, 0) == "english"
-    not_english_detections = {
-        "Detections": [{
-            "Detection": [
-                {"code": "cn", "percentage": 0.95},
-                {"code": "en", "percentage": 0.05}
-            ]
-        }]
-    }
-    assert dt.inspector(not_english_detections, "", None, None, 0) == "not english"
-    mixed_detections = {
-        "Detections": [{
-            "Detection": [
-                {"code": "en", "percentage": 1.0},
-                {"code": "cn", "percentage": 1.0}
-            ]
-        }]
-    }
-    assert dt.inspector(mixed_detections, "", None, None, 0) == "mixed"
-
-
-# Test all main
-def test_main():
-    dt._CSV_OUTPUT = 1
-    dt._CSV = "test_stuff/input.csv"
-    dt.main()
-
-
-# Test no csv
-def test_fail_main():
-    with pytest.raises(Exception):
-        dt._CSV = ""
-        dt.main()
-
-
-# Override
-def new_is_valid(string):
-    return True
-
-
-def test_fail_lang_detect():
-    dt.is_valid = new_is_valid
-    dt._MIN_LENGTH = 2
-    dt._CSV = "test_stuff/input.csv"
-    dt.main()
-
-
-def test_fail_inspector():
-    with open(dt._CSV, encoding='utf-8', errors='ignore') as srcfile:
-        readers = csv.DictReader(srcfile, delimiter=',')
-        with open(dt._NEW_CSV, 'w', newline='') as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=dt._FIELDNAMES)
-            writer.writeheader()
-            for row in readers:
-                value = dt.inspector("", "", writer, row, 0)
-
-
-
-
 

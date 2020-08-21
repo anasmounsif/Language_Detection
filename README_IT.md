@@ -2,7 +2,6 @@
 
 [![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
 [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
-[![Coverage Status](https://coveralls.io/repos/github/anasmounsif/Language_Detection/badge.svg?branch=master)](https://coveralls.io/github/anasmounsif/Language_Detection?branch=master)
 
 Questo progetto si occupa di *analizzare* e *classificare* le repository GitHub in base alla lingua utilizzata per la stesura del **README**.
 
@@ -14,7 +13,7 @@ $ pip3 install langdetect
 ```
 
 ### Get Started
-Per utilizzare Language Detector individualmente, se utilizzi MacOS o Linux digitare il comando:
+Per utilizzare lo script individualmente, se utilizzi MacOS o Linux digitare il comando:
 
 `$ python language_detection.py`
 
@@ -23,7 +22,7 @@ Per utilizzare Language Detector individualmente, se utilizzi MacOS o Linux digi
 - [x] Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
 - [x] Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
 - [x] Classificazione di tutti i README all'interno della repository.
-- [ ] Generazione CSV in input contenente i path verso le repository.
+- [x] Generazione CSV in input contenente i path verso le repository.
 
 #### Come Funziona?
 
@@ -36,6 +35,12 @@ Lo script prende in input un file CSV che deve contenere le informazioni sulla p
 | ...      | ...                                   |
 
 È possibile fornire allo script il [*nome*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) del CSV mediante l'utilizzo del file di configurazione.
+
+###### Non hai il file input.csv?
+
+Lo script è in grado di generare automaticamente il file input.csv a partire dalla cartella dove le repository sono state clonate, tutto ciò che devi fare è settare `input_generator=1` [*qui*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) ed [*inserire*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) il path dove sono presenti le repository.
+
+---
 
 Language Detection utilizza la libreria [*langdetect*](https://github.com/Mimino666/langdetect) che implementa un classificatore Naive Bayes migliorato attraverso una normalizzazione dei caratteri e l'applicazione di specifici filtri, per più dettagli guarda: [*langdetect slideshare*](https://www.slideshare.net/shuyo/language-detection-library-for-java).
 
@@ -105,16 +110,17 @@ Se utilizzato individualmente _sarebbe opportuno modificare con cautela i parame
 
 Durante l'esecuzione lo script genera un file di log ove è possibile consultare tutte le operazioni compiute nonché i risultati della detection, ovviamente il logging è un'operazione costosa dunque per default il livello è configurato su INFO, se si ha necessità di un logging più dettagliato modificare la seguente [*riga*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) in `level=DEBUG` nel file di configurazione.
 
-:warning: **Per una corretta esecuzione di Language Detector è necessario che le repository da analizzare siano state clonate!** :warning:
+:warning: **Per una corretta esecuzione di *Language Detection* è necessario che le repository da analizzare siano state clonate!** :warning:
 
 #### Test
 
-Per eseguire i test digitare da terminale il comando: `$ pytest` all'interno della cartella root oppure è anche possibile eseguire test specifici digitando il comando: `$ py.test -k <test_name> -v`
+Per eseguire i test digitare da terminale il comando: `$ pytest -v` all'interno della cartella root oppure è anche possibile eseguire test specifici digitando il comando: `$ py.test -k <test_name> -v`
 
 Per ulteriori informazioni consultare la [*documentazione*](https://docs.pytest.org/en/stable/contents.html).
 
 ### Conclusioni
 
-Language Detector *è parte integrante* del progetto [*G-Repo*](https://github.com/MatHeartGaming/G-Repo), sviluppato in collaborazione con l'Università Degli Studi Della Basilicata :top:
+Language Detection *è parte integrante* del progetto [*G-Repo*](https://github.com/MatHeartGaming/G-Repo), sviluppato in collaborazione con l'Università Degli Studi Della Basilicata :top:
 
+---
 [![MIT license](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)
