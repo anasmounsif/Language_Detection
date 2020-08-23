@@ -1,5 +1,4 @@
 """
-
 LANGUAGE DETECTOR SCRIPT
 Author: Anas Mounsif - Università Degli Studi Della Basilicata
 
@@ -12,21 +11,19 @@ Usage:
 [ python3 language_detection.py ] or [ python3 language_detection.py -h ] for more information.
 
 * Consult config.ini and log.conf
-
 """
 
 # ----------------------------------------------------------------------------------------------------------------------
 # IMPORTS
 # ----------------------------------------------------------------------------------------------------------------------
 # Importing Libraries
-import langdetect as dl
-import logging.config
-import shutil as sh
-import time
-import csv
-import re
 import os
-
+import re
+import csv
+import time
+import shutil as sh
+import logging.config
+import langdetect as dl
 from pathlib import Path
 from datetime import date
 from glob import glob as gl
@@ -39,8 +36,8 @@ from langdetect.lang_detect_exception import LangDetectException
 # ----------------------------------------------------------------------------------------------------------------------
 # ABOUT AUTHOR
 # ----------------------------------------------------------------------------------------------------------------------
+# Creates problem with pytest --cov=module_name command
 '''
-
 import argparse
 
 # Colors Configuration
@@ -69,7 +66,7 @@ parser = argparse.ArgumentParser(description=_DESCRIPTION, formatter_class=argpa
 parser.add_argument("-v", "--version", help=" show script version", action='version', version=' version: 1.0.8')
 parser.add_argument("-a", "--author", help=" show author information", action='version', version=_ABOUT)
 parser.parse_args()
-'''  # <-- Creates problem with pytest --cov=module_name command
+'''
 
 # ----------------------------------------------------------------------------------------------------------------------
 # PREFERENCES
@@ -86,7 +83,7 @@ _CSV_OUTPUT = 0 if int(parser.get("files", "activate_csv_output")) == 0 else 1
 _INPUT_GENERATOR = 0 if int(parser.get("files", "input_generator")) == 0 else 1
 _REPOSITORIES_PATH = Path(str(parser.get("files", "repository_path")))
 
-# True if you want the script to move the repositories else False in config.ini - be care to ACCESS DENIED problem!
+# True if you want the script to move the repositories else False in config.ini - be care to ACCESS DENIED error!
 _MOVE = False if int((parser.get("parameters", "moving_feature"))) == 0 else True
 
 # Modify as needed in config.ini, but pay attention to folder's structure
@@ -105,14 +102,14 @@ _INPUT_FIELDNAMES = ['Index', 'CloneDirectory']  # Fieldnames structure of input
 
 # Regex patterns
 # _WARNING = r"[^A-Za-z0-9]"  # pattern to recognize all special characters - Also delete the Chinese Character!
-_TABLES = r"^(\|[^\n]+\|\r?\n)((?:\|:?[-]+:?)+\|)(\n(?:\|[^\n]+\|\r?\n?)*)?$"  # pattern to recognize tables
-_REMAINING_SPECIAL_CHARS = r"([#@\s]|:[)(])|\W"  # pattern to recognize all special characters
-_ILLEGAL_STRING = r'^[_\W0-9]+$'  # pattern to recognize the only digits or special character
-_URLS = r"https?:\/\/?[\da-z\.-]+\.[a-z\.]{2,6}[\/\w \.-]*"  # pattern to recognize urls
-_CODE_SNIPPETS = r"(```.+?```)"  # pattern to recognize code snippets
-_IMAGES = r"!\[[^\]]+\]\([^)]+\)"  # pattern to recognize images
-_HTML = r"\<.*?\>"  # pattern to recognize the html code
-_LINKS = r"\[.*?\]\(.*?\)"  # pattern to recognize links
+_TABLES = r"^(\|[^\n]+\|\r?\n)((?:\|:?[-]+:?)+\|)(\n(?:\|[^\n]+\|\r?\n?)*)?$"  # Recognize tables
+_REMAINING_SPECIAL_CHARS = r"([#@\s]|:[)(])|\W"  # Recognize all special characters
+_ILLEGAL_STRING = r'^[_\W0-9]+$'  # Recognize the only digits or special character
+_URLS = r"https?:\/\/?[\da-z\.-]+\.[a-z\.]{2,6}[\/\w \.-]*"  # Recognize urls
+_CODE_SNIPPETS = r"(```.+?```)"  # Recognize code snippets
+_IMAGES = r"!\[[^\]]+\]\([^)]+\)"  # Recognize images
+_HTML = r"\<.*?\>"  # Recognize the html code
+_LINKS = r"\[.*?\]\(.*?\)"  # Recognize links
 
 # Supported extension
 _EXTENSIONS = ['*.markdown', '*.mkdn', '*.md', '*.mdown', '*.txt', '*.mdwn', '*.mkd']
@@ -149,6 +146,7 @@ def _print_exception(e):
 # Takes care of passing the text and the pattern to the stripper
 def _refactor(str_md, pattern) -> str:
     outcome = replacer(str_md, pattern)
+
     return outcome
 
 
@@ -173,11 +171,13 @@ def _csv_writer(writer, row, destination, num_readme, lang,
 
 # Getting name of the repository
 def _name_of(repo) -> str:
+
     return PATH.abspath(repo).split(PATH.sep)[-1]
 
 
 # Getting absolute path of the Destination - if MOVE = True
 def _get_destination(relative_destination, repository) -> str:
+
     return Path(PATH.abspath(relative_destination) + SEPARATOR + _name_of(repository))
 
 
@@ -185,28 +185,33 @@ def _get_destination(relative_destination, repository) -> str:
 def _find_all_md(repo) -> []:
     DEBUG("Looking for all readme...")
     files = [f for ext in _EXTENSIONS for f in gl(os.path.join(repo, '**', ext), recursive=True)]
+
     return [i for i in files if "readme" in PATH.basename(i.lower())]
 
 
 # Transform percentage into ##.# format
 def _format(percent) -> str:
+
     return "{:.1f}".format(100 * percent)
 
 
 # Checking if README is valid
 def _is_valid(string) -> bool:
     condition = re.match(_ILLEGAL_STRING, string)
+
     return False if len(string) < _MIN_LENGTH or condition else True
 
 
 # Checking the typology of the approach and perform the detection
 def _language_detector(target) -> []:
     dl.DetectorFactory.seed = _OUTPUT_TYPE
+
     return dl.detect_langs(target)
 
 
 # Checking if if english was detected
 def _is_there_english(percentage) -> bool:
+
     return True if percentage > 0.0 else False
 
 
@@ -260,6 +265,25 @@ def replacer(txt, pattern) -> Optional[str]:
         return new_file
     else:
         return None
+
+
+# Generating input.csv
+def generate_input() -> int:
+    # Getting all folders(repositories) in the path provided
+    folders_paths = [f.path for f in os.scandir(_REPOSITORIES_PATH) if f.is_dir()]
+
+    with open(_CSV, 'w', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=_INPUT_FIELDNAMES)
+
+        # Writing fields
+        writer.writeheader()
+
+        index = 0
+        for folder_path in folders_paths:
+            writer.writerow({'Index': '%s' % index, 'CloneDirectory': '%s' % folder_path})
+            index += 1
+
+    return len(folders_paths)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -368,7 +392,7 @@ def operator(detections, repo, writer, row, num):
     except Exception as ex:
         increment_error()
         CRITICAL("Exception caught: ", exc_info=True)
-        _print_exception(" Catched by inspector method on repository: %s - %s " % (_name_of(repo), ex))
+        _print_exception(" Raised by inspector method on repository: %s - %s " % (_name_of(repo), ex))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -450,7 +474,6 @@ def main():
 
                                     else:
                                         for result in results:
-
                                             INFO("LANGUAGE DETECTED: {} with {}% confidence."
                                                  .format(result.lang, _format(result.prob)))
 
@@ -460,6 +483,7 @@ def main():
                                                     "percentage": result.prob
                                                 }
                                             ]})
+
                                 else:
                                     WARNING("Checking if readme is empty.. [IS EMPTY]")
 
@@ -503,22 +527,7 @@ def main():
     except Exception as ex:
         increment_error()
         CRITICAL("Exception caught: ", exc_info=True)
-        _print_exception(" Catched by main method on repository: %s - %s " % (_name_of(repo_src), ex))
-
-
-# Generating input.csv
-def generate_input():
-
-    # Getting all folders(repositories) in path provided
-    all_folders = [f.path for f in os.scandir(_REPOSITORIES_PATH) if f.is_dir()]
-
-    with open(_CSV, 'w', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=_INPUT_FIELDNAMES)
-        writer.writeheader()
-        index = 0
-        for folder in all_folders:
-            writer.writerow({'Index': '%s' % index, 'CloneDirectory': '%s' % folder})
-            index += 1
+        _print_exception(" Raised by main method on repository: %s - %s " % (_name_of(repo_src), ex))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -527,7 +536,7 @@ def generate_input():
 # Summary logs
 _start_time, _is_move, _is_csv, _is_deterministic = _log_info()
 
-print("Loading...")
+print("START! \n\nLoading...")
 INFO("{} - STARTING SCRIPT..."
      "\n\nScript Config\n"
      "- - - - - - - - - - - - - - - - - - - -"
@@ -540,7 +549,9 @@ if __name__ == "__main__":  # So you can use [ language_detection.py ] as module
     if _INPUT_GENERATOR == 1:
 
         # Generating first the input and next starting main
-        generate_input()
+        DEBUG("Generating input.csv with path: %s \n" % _REPOSITORIES_PATH)
+        repositories_found = generate_input()
+        DEBUG("Repositories Found: %s" % repositories_found)
         main()
 
     else:
@@ -549,3 +560,4 @@ if __name__ == "__main__":  # So you can use [ language_detection.py ] as module
 # Calculates the execution time of the script
 _TOTAL_TIME = time.time() - _start_time
 INFO("\n\nFinished in: {} seconds with {} Errors.".format(_TOTAL_TIME, _TOTAL_ERRORS))
+print("FINISH!")

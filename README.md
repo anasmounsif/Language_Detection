@@ -1,6 +1,6 @@
 ## Language Detection
 
-[![Python versions](https://badgen.net/badge/python/3.6,3.7,3.8/blue?icon=pypi&list=|)](https://www.python.org)
+[![Python versions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-4682B4.svg?longCache=true&style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![Build Status](https://travis-ci.com/anasmounsif/Language_Detection.svg?token=7m4zb6JD1gtxhrzEgWkG&branch=master)](https://travis-ci.com/anasmounsif/Language_Detection)
 
 This project deals with *analysing* and *classifying* the GitHub repositories based on the language used for the drafting of the **README**.
@@ -21,12 +21,12 @@ To use script individually, if you are using MacOS or Linux type:
 
 #### Tasks
 
-- [x] Generation of CSV in output which contains the results of the classification and the new paths after the shift.
-- [x] Moving repositories to dedicated folders based on language detection results.
-- [x] Classification of all READMEs inside the repository.
-- [x] Making CSV as input for the script.
+- [x]  Generation of CSV in output which contains the results of the classification and the new paths after the shift.
+- [x]  Moving repositories to dedicated folders based on language detection results.
+- [x]  Classification of all READMEs inside the repository.
+- [x]  Making CSV as input for the script.
 
-#### How does it work?
+#### How does it work
 
 The script takes as input a CSV file that must contain information on the location of the repositories to be analysed:
 
@@ -38,7 +38,7 @@ The script takes as input a CSV file that must contain information on the locati
 
 You can give the script the [*name*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) of the CSV by using the configuration file.
 
-###### You don't have the input.csv?
+###### You don't have the input.csv
 
 The script is able to automatically generate for you an input.csv file starting from the folder where the repositories are cloned, all you have to do is set `input_generator=1` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) and [*supply*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) the path where the repositories are.
 
@@ -63,20 +63,20 @@ The results are then noted in the CSV generated in output:
 
 Repositories can be classified into:
 
-* Mixed
-* English
-* Not English
+-  Mixed
+-  English
+-  Not English
 
 The repositories with an absent and empty README, which have less than the minimum [*number*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) of characters or with an extension not supported, will be classified as *Unknown*, and it will then be up to the user to analyse them manually.
 
 Extensions supported:
-* .markdown
-* .mdown
-* .mdwn
-* .mkdn
-* .mkd
-* .md
-* .txt
+-  markdown
+-  mdown
+-  mdwn
+-  mkdn
+-  mkd
+-  md
+-  txt
 
 | Index    | Path                                           | Readme Analyzed | Language Detected | Code   | Percentage | Code   | Percentage |
 |:--------:|------------------------------------------------|:---------------:|-------------------|:------:|:----------:|:------:|:----------:|
@@ -86,13 +86,13 @@ Extensions supported:
 
 GitHub :octocat: provides several *markdowns* that could affect language detection, so the script has an additional feature, that is to **clean** the README analysed by the following markdowns:
 
-* URLs
-* HTML
-* Links
-* Tables
-* Images
-* Code Snippets
-* Special characters
+-  URLs
+-  HTML
+-  Links
+-  Tables
+-  Images
+-  Code Snippets
+-  Special characters
 
 By default *langdetect* uses a **nondeterministic** approach, this feature is part of the original Google project, if you need to force the algorithm to use a deterministic approach make `translation_type=0` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8).
 
@@ -128,4 +128,4 @@ For more information, see the [*documentation*](https://docs.pytest.org/en/stabl
 Language Detection is an *integral* part of [*G-Repo*](https://github.com/MatHeartGaming/G-Repo)  project and it was developed in collaboration with the University of Basilicata :top:
 
 ---
-[![MIT license](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)
+[![MIT license](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/anasmounsif/Language_Detection/blob/master/LICENSE)
