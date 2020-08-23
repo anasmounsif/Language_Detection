@@ -1,10 +1,8 @@
-```
+```java
 if (isAwesome){
   return true
 }
 ```
-
-https://github.com/MatHeartGaming/G-Repo
 
 <html>
 <head>
@@ -28,11 +26,3 @@ https://github.com/MatHeartGaming/G-Repo
 |               |               |       |
 |               |               |       |
 |               |               |       |
-
-
-!!
-
-#
-
-
-##

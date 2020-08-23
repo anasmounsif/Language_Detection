@@ -7,7 +7,7 @@ Questo progetto si occupa di *analizzare* e *classificare* le repository GitHub 
 
 ### Requisiti
 
-```
+```bash
 $ pip3 install six
 $ pip3 install pytest
 $ pip3 install langdetect
@@ -20,10 +20,10 @@ Per utilizzare lo script individualmente, se utilizzi MacOS o Linux digitare il 
 
 #### Tasks
 
-- [x]  Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
-- [x]  Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
-- [x]  Classificazione di tutti i README all'interno della repository.
-- [x]  Generazione CSV in input contenente i path verso le repository.
+- [x]    Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
+- [x]    Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
+- [x]    Classificazione di tutti i README all'interno della repository.
+- [x]    Generazione CSV in input contenente i path verso le repository.
 
 #### Come Funziona
 
@@ -37,7 +37,7 @@ Lo script prende in input un file CSV che deve contenere le informazioni sulla p
 
 È possibile fornire allo script il [*nome*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) del CSV mediante l'utilizzo del file di configurazione.
 
-###### Non hai il file input.csv
+##### Non hai il file input.csv
 
 Lo script è in grado di generare automaticamente il file input.csv a partire dalla cartella dove le repository sono state clonate, tutto ciò che devi fare è settare `input_generator=1` [*qui*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) ed [*inserire*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) il path dove sono presenti le repository.
 
@@ -62,20 +62,20 @@ I risultati vengono poi annotati nel CSV generato in output:
 
 Dunque le repository possono essere classificate in:
 
--  Misto
--  Inglese
--  Non Inglese
+-   Misto
+-   Inglese
+-   Non Inglese
 
 Le repository aventi il README assente, vuoto, con meno del [*numero minimo*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) di caratteri oppure con un'estensione non supportata verranno classificate come *Unknown*, e sarà poi cura dell'utente analizzarle manualmente.
 
 Estensioni supportate:
--  markdown
--  mdown
--  mdwn
--  mkdn
--  mkd
--  md
--  txt
+-   markdown
+-   mdown
+-   mdwn
+-   mkdn
+-   mkd
+-   md
+-   txt
 
 | Index    | Path                                           | Readme Analyzed | Language Detected | Code   | Percentage | Code   | Percentage |
 |:--------:|------------------------------------------------|:---------------:|-------------------|:------:|:----------:|:------:|:----------:|
@@ -85,13 +85,13 @@ Estensioni supportate:
 
 GitHub :octocat: mette a disposizione numerosi *markdown*, quest'ultimi potrebbero influenzare la detection della lingua, perciò lo script dispone di un'ulteriore feature, ovvero quella di pulire il README analizzato dai seguenti markdown:
 
--  Link
--  URLs
--  HTML
--  Tabelle
--  Immagini
--  Code Snippet
--  Caratteri Speciali
+-   Link
+-   URLs
+-   HTML
+-   Tabelle
+-   Immagini
+-   Code Snippet
+-   Caratteri Speciali
 
 Di default *langdetect* utilizza un approccio **non deterministico**, questa funzionalità è parte del progetto originale di Google, se hai bisogno di forzare l'algoritmo ad utilizzare un approccio deterministico modifica la seguente [*linea*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8) in `translation_type=0` nel file di configurazione.
 
@@ -107,7 +107,7 @@ destination_unknown = path
 
 Nonché [*disabilitare*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L6) lo spostamento; `moving_feature=0`, oppure [*disabilitare*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L14) la generazione del file CSV in output; `activate_csv_output=0`
 
-Se utilizzato individualmente _sarebbe opportuno modificare con cautela i parametri all'interno del file di configurazione_.
+Se utilizzato individualmente *sarebbe opportuno modificare con cautela i parametri all'interno del file di configurazione*.
 
 Durante l'esecuzione lo script genera un file di log ove è possibile consultare tutte le operazioni compiute nonché i risultati della detection, ovviamente il logging è un'operazione costosa dunque per default il livello è configurato su INFO, se si ha necessità di un logging più dettagliato modificare la seguente [*riga*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) in `level=DEBUG` nel file di configurazione.
 

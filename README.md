@@ -7,7 +7,7 @@ This project deals with *analysing* and *classifying* the GitHub repositories ba
 
 ### Requirements
 
-```
+```bash
 $ pip3 install six
 $ pip3 install pytest
 $ pip3 install langdetect
@@ -21,10 +21,10 @@ To use script individually, if you are using MacOS or Linux type:
 
 #### Tasks
 
-- [x]  Generation of CSV in output which contains the results of the classification and the new paths after the shift.
-- [x]  Moving repositories to dedicated folders based on language detection results.
-- [x]  Classification of all READMEs inside the repository.
-- [x]  Making CSV as input for the script.
+- [x]    Generation of CSV in output which contains the results of the classification and the new paths after the shift.
+- [x]    Moving repositories to dedicated folders based on language detection results.
+- [x]    Classification of all READMEs inside the repository.
+- [x]    Making CSV as input for the script.
 
 #### How does it work
 
@@ -63,20 +63,20 @@ The results are then noted in the CSV generated in output:
 
 Repositories can be classified into:
 
--  Mixed
--  English
--  Not English
+-   Mixed
+-   English
+-   Not English
 
 The repositories with an absent and empty README, which have less than the minimum [*number*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) of characters or with an extension not supported, will be classified as *Unknown*, and it will then be up to the user to analyse them manually.
 
 Extensions supported:
--  markdown
--  mdown
--  mdwn
--  mkdn
--  mkd
--  md
--  txt
+-   markdown
+-   mdown
+-   mdwn
+-   mkdn
+-   mkd
+-   md
+-   txt
 
 | Index    | Path                                           | Readme Analyzed | Language Detected | Code   | Percentage | Code   | Percentage |
 |:--------:|------------------------------------------------|:---------------:|-------------------|:------:|:----------:|:------:|:----------:|
@@ -86,13 +86,13 @@ Extensions supported:
 
 GitHub :octocat: provides several *markdowns* that could affect language detection, so the script has an additional feature, that is to **clean** the README analysed by the following markdowns:
 
--  URLs
--  HTML
--  Links
--  Tables
--  Images
--  Code Snippets
--  Special characters
+-   URLs
+-   HTML
+-   Links
+-   Tables
+-   Images
+-   Code Snippets
+-   Special characters
 
 By default *langdetect* uses a **nondeterministic** approach, this feature is part of the original Google project, if you need to force the algorithm to use a deterministic approach make `translation_type=0` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8).
 
