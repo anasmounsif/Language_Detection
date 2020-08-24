@@ -8,16 +8,16 @@ This project deals with *analysing* and *classifying* the GitHub repositories ba
 ### Requirements
 
 ```bash
-$ pip3 install six
-$ pip3 install pytest
-$ pip3 install langdetect
+pip3 install six
+pip3 install pytest
+pip3 install langdetect
 ```
 
 ### Get Started
 
 To use script individually, if you are using MacOS or Linux type:
 
-`$ python language_detection.py`
+`python language_detection.py`
 
 #### Tasks
 
@@ -38,7 +38,7 @@ The script takes as input a CSV file that must contain information on the locati
 
 You can give the script the [*name*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) of the CSV by using the configuration file.
 
-###### You don't have the input.csv
+##### If you don't have the input.csv
 
 The script is able to automatically generate for you an input.csv file starting from the folder where the repositories are cloned, all you have to do is set `input_generator=1` [*here*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) and [*supply*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) the path where the repositories are.
 
@@ -61,28 +61,31 @@ The results are then noted in the CSV generated in output:
 | 2        |  Absolute path to another one                  |  1              | `Not English `    | others | 100%       | //     | //         |
 | ...      | ...                                            |  ...            | ...               | ...    | ...        | ...    | ...        |
 
-Repositories can be classified into:
+You can change the result by changing the [*maximum*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L37) and [*minimum*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L35) English percentages so that a repository can be classified as:
 
 -   Mixed
 -   English
 -   Not English
 
-The repositories with an absent and empty README, which have less than the minimum [*number*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) of characters or with an extension not supported, will be classified as *Unknown*, and it will then be up to the user to analyse them manually.
+The repositories with an absent and empty README, which have less than the minimum [*number*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) of characters or with an extension not supported, will be classified as *Unknown*:
 
-Extensions supported:
--   markdown
--   mdown
--   mdwn
--   mkdn
--   mkd
--   md
--   txt
 
 | Index    | Path                                           | Readme Analyzed | Language Detected | Code   | Percentage | Code   | Percentage |
 |:--------:|------------------------------------------------|:---------------:|-------------------|:------:|:----------:|:------:|:----------:|
 | 0        |  Absolute path to analyzed repository          |  1              | `Unknown`         | //     | //         | //     | //         |
 | 0        |  Absolute path to another analyzed repository  |  0              | `Unknown`         | //     | //         | //     | //         |
 | ...      | ...                                            | ...             | ...               | ...    | ...        | ...    | ...        |
+
+It will then be up to the user to analyse them manually.
+
+Extensions supported:
+-   .markdown
+-   .mdown
+-   .mdwn
+-   .mkdn
+-   .mkd
+-   .md
+-   .txt
 
 GitHub :octocat: provides several *markdowns* that could affect language detection, so the script has an additional feature, that is to **clean** the README analysed by the following markdowns:
 
@@ -111,15 +114,15 @@ As well as [*disable*](https://github.com/anasmounsif/Language_Detection/blob/ma
 If used individually, *it would be appropriate to carefully modify the parameters in the configuration file*.
 
 During the execution the script generates a log file where it is possible to consult all the operations performed as well as the results of the detection.
-Logging is an expensive operation so by default the level is set to INFO, if you need a more detailed logging change this [*line*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) to `level=DEBUG` in the configuration file.
+By default the level is set to INFO, if you need a more detailed logging change this [*line*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) to `level=DEBUG` in the configuration file.
 
-:warning: **For the execution to be successful the repositories will be cloned!** :warning:
+:warning: **For the execution to be successful the repositories must be cloned!** :warning:
 
 #### Test
 
-To run the tests, type: `$ pytest -v` inside the root folder or you can also run specific tests by typing:
+To run the tests, type: `pytest -v` inside the root folder or you can also run specific tests by typing:
 
-`$ py.test -k <test_name> -v`
+`py.test -k <test_name>`
 
 For more information, see the [*documentation*](https://docs.pytest.org/en/stable/contents.html).
 

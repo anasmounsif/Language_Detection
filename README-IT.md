@@ -8,22 +8,22 @@ Questo progetto si occupa di *analizzare* e *classificare* le repository GitHub 
 ### Requisiti
 
 ```bash
-$ pip3 install six
-$ pip3 install pytest
-$ pip3 install langdetect
+pip3 install six
+pip3 install pytest
+pip3 install langdetect
 ```
 
 ### Get Started
 Per utilizzare lo script individualmente, se utilizzi MacOS o Linux digitare il comando:
 
-`$ python language_detection.py`
+`python language_detection.py`
 
 #### Tasks
 
-- [x]    Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
-- [x]    Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
-- [x]    Classificazione di tutti i README all'interno della repository.
-- [x]    Generazione CSV in input contenente i path verso le repository.
+-   [x]    Generazione CSV in output contenente i risultati della classificazione e i nuovi path dopo lo spostamento.
+-   [x]    Spostamento delle repository in cartelle dedicate in base ai risultati della detection della lingua.
+-   [x]    Classificazione di tutti i README all'interno della repository.
+-   [x]    Generazione CSV in input contenente i path verso le repository.
 
 #### Come Funziona
 
@@ -37,7 +37,7 @@ Lo script prende in input un file CSV che deve contenere le informazioni sulla p
 
 È possibile fornire allo script il [*nome*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L16) del CSV mediante l'utilizzo del file di configurazione.
 
-##### Non hai il file input.csv
+##### Se non hai il file input.csv
 
 Lo script è in grado di generare automaticamente il file input.csv a partire dalla cartella dove le repository sono state clonate, tutto ciò che devi fare è settare `input_generator=1` [*qui*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L20) ed [*inserire*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L21) il path dove sono presenti le repository.
 
@@ -60,22 +60,13 @@ I risultati vengono poi annotati nel CSV generato in output:
 | 2        |  etc                                           |  1              | `Not English `    | others | 100%       | //     | //         |
 | ...      | ...                                            |  ...            | ...               | ...    | ...        | ...    | ...        |
 
-Dunque le repository possono essere classificate in:
+È possibile gestire il risultato modificando le percentuali di inglese [*massime*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L37) e [*minime*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L35) affinché una repository possa essere classificata come:
 
--   Misto
--   Inglese
--   Non Inglese
+-    Mista
+-    Inglese
+-    Non Inglese
 
-Le repository aventi il README assente, vuoto, con meno del [*numero minimo*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) di caratteri oppure con un'estensione non supportata verranno classificate come *Unknown*, e sarà poi cura dell'utente analizzarle manualmente.
-
-Estensioni supportate:
--   markdown
--   mdown
--   mdwn
--   mkdn
--   mkd
--   md
--   txt
+Le repository aventi il README assente, vuoto, con meno del [*numero minimo*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L10) di caratteri oppure con un'estensione non supportata verranno classificate come *Unknown*,
 
 | Index    | Path                                           | Readme Analyzed | Language Detected | Code   | Percentage | Code   | Percentage |
 |:--------:|------------------------------------------------|:---------------:|-------------------|:------:|:----------:|:------:|:----------:|
@@ -83,15 +74,27 @@ Estensioni supportate:
 | 0        |  etc                                           |  0              | `Unknown`         | //     | //         | //     | //         |
 | ...      | ...                                            | ...             | ...               | ...    | ...        | ...    | ...        |
 
+Sarà poi cura dell'utente analizzarle manualmente.
+
+Estensioni supportate:
+
+-    .markdown
+-    .mdown
+-    .mdwn
+-    .mkdn
+-    .mkd
+-    .md
+-    .txt
+
 GitHub :octocat: mette a disposizione numerosi *markdown*, quest'ultimi potrebbero influenzare la detection della lingua, perciò lo script dispone di un'ulteriore feature, ovvero quella di pulire il README analizzato dai seguenti markdown:
 
--   Link
--   URLs
--   HTML
--   Tabelle
--   Immagini
--   Code Snippet
--   Caratteri Speciali
+-    Link
+-    URLs
+-    HTML
+-    Tabelle
+-    Immagini
+-    Code Snippet
+-    Caratteri Speciali
 
 Di default *langdetect* utilizza un approccio **non deterministico**, questa funzionalità è parte del progetto originale di Google, se hai bisogno di forzare l'algoritmo ad utilizzare un approccio deterministico modifica la seguente [*linea*](https://github.com/anasmounsif/Language_Detection/blob/master/config.ini#L8) in `translation_type=0` nel file di configurazione.
 
@@ -109,13 +112,13 @@ Nonché [*disabilitare*](https://github.com/anasmounsif/Language_Detection/blob/
 
 Se utilizzato individualmente *sarebbe opportuno modificare con cautela i parametri all'interno del file di configurazione*.
 
-Durante l'esecuzione lo script genera un file di log ove è possibile consultare tutte le operazioni compiute nonché i risultati della detection, ovviamente il logging è un'operazione costosa dunque per default il livello è configurato su INFO, se si ha necessità di un logging più dettagliato modificare la seguente [*riga*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) in `level=DEBUG` nel file di configurazione.
+Durante l'esecuzione lo script genera un file di log ove è possibile consultare tutte le operazioni compiute nonché i risultati della detection, di default il livello è configurato su INFO, se si ha necessità di un logging più dettagliato modificare la seguente [*riga*](https://github.com/anasmounsif/Language_Detection/blob/master/log.conf#L23) in `level=DEBUG` nel file di configurazione.
 
 :warning: **Per una corretta esecuzione di *Language Detection* è necessario che le repository da analizzare siano state clonate!** :warning:
 
 #### Test
 
-Per eseguire i test digitare da terminale il comando: `$ pytest -v` all'interno della cartella root oppure è anche possibile eseguire test specifici digitando il comando: `$ py.test -k <test_name> -v`
+Per eseguire i test digitare da terminale il comando: `pytest -v` all'interno della cartella root oppure è anche possibile eseguire test specifici digitando il comando: `py.test -k <test_name>`
 
 Per ulteriori informazioni consultare la [*documentazione*](https://docs.pytest.org/en/stable/contents.html).
 
